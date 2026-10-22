@@ -1,17 +1,29 @@
+
+-- Creates the first version of the project database.
+-- Run this file before running the seed file.
+-- The transaction prevents a partially-created schema if a statement fails.
 BEGIN;
 
+-- Stores customer and administrator accounts.
 CREATE TABLE IF NOT EXISTS users (
+
+    -- PostgreSQL generates identity IDs automatically.
     id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+
+    -- New registrations should always use the default customer role.
     role VARCHAR(20) NOT NULL DEFAULT 'customer',
     first_name VARCHAR(100) NOT NULL,
     last_name VARCHAR(100) NOT NULL,
     date_of_birth DATE,
     email VARCHAR(255) NOT NULL,
+
+    -- Store a bcrypt/Argon2 hash here, never a plain-text password.
     password_hash VARCHAR(255) NOT NULL,
     phone_number VARCHAR(30),
     created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
+    -- CHECK constraints reject invalid data before it reaches the table.
     CONSTRAINT users_role_check
         CHECK (role IN ('customer', 'admin')),
     CONSTRAINT users_email_not_blank_check
@@ -23,9 +35,11 @@ CREATE TABLE IF NOT EXISTS users (
 );
 
 -- Treat differently-cased versions of the same email as duplicates.
+-- For example, User@email.com and user@email.com cannot both register.
 CREATE UNIQUE INDEX IF NOT EXISTS users_email_lower_unique
     ON users (LOWER(email));
 
+-- Automatically refresh users.updated_at whenever a user row changes.
 CREATE OR REPLACE FUNCTION set_updated_at()
 RETURNS TRIGGER AS $$
 BEGIN
@@ -41,6 +55,7 @@ CREATE TRIGGER users_set_updated_at
     FOR EACH ROW
     EXECUTE FUNCTION set_updated_at();
 
+-- Stores the rooms displayed on the hotel screen.
 CREATE TABLE IF NOT EXISTS rooms (
     id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     room_number VARCHAR(20) NOT NULL UNIQUE,
@@ -54,6 +69,8 @@ CREATE TABLE IF NOT EXISTS rooms (
     image_url TEXT,
     has_wifi BOOLEAN NOT NULL DEFAULT FALSE,
     breakfast_included BOOLEAN NOT NULL DEFAULT FALSE,
+
+    -- PostgreSQL TEXT[] stores amenities as a list of strings.
     special_amenities TEXT[] NOT NULL DEFAULT ARRAY[]::TEXT[],
 
     CONSTRAINT rooms_room_number_not_blank_check
@@ -70,9 +87,11 @@ CREATE TABLE IF NOT EXISTS rooms (
         CHECK (status IN ('available', 'maintenance', 'inactive'))
 );
 
+-- Helps searches such as "available rooms for at least four guests".
 CREATE INDEX IF NOT EXISTS rooms_status_capacity_index
     ON rooms (status, capacity);
 
+-- Stores the tables displayed on the restaurant screen.
 CREATE TABLE IF NOT EXISTS restaurant_tables (
     id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     table_number VARCHAR(20) NOT NULL UNIQUE,
@@ -90,7 +109,9 @@ CREATE TABLE IF NOT EXISTS restaurant_tables (
         CHECK (status IN ('available', 'maintenance', 'inactive'))
 );
 
+-- Helps searches such as "available tables for at least four guests".
 CREATE INDEX IF NOT EXISTS restaurant_tables_status_capacity_index
     ON restaurant_tables (status, capacity);
 
+-- Save every schema change made inside this transaction.
 COMMIT;

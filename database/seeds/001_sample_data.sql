@@ -1,5 +1,9 @@
+
+-- Adds sample data so the hotel and restaurant screens have records to show.
+-- Run database/migrations/001_initial_schema.sql before this file.
 BEGIN;
 
+-- Sample hotel rooms. No users are seeded because passwords require secure hashes.
 INSERT INTO rooms (
     room_number,
     room_type,
@@ -21,6 +25,8 @@ VALUES
     ('202', 'Deluxe Twin', 'Large room with two beds and complimentary breakfast.', 4500.00, 4, 'Double', 2, 'available', NULL, TRUE, TRUE, ARRAY['Air conditioning', 'Television', 'Mini refrigerator']),
     ('301', 'Family Suite', 'Family suite with additional living space.', 6500.00, 6, 'Mixed', 3, 'available', NULL, TRUE, TRUE, ARRAY['Air conditioning', 'Television', 'Living area', 'Kitchenette']),
     ('302', 'Executive Suite', 'Premium suite intended for business and leisure stays.', 7500.00, 4, 'King', 1, 'maintenance', NULL, TRUE, TRUE, ARRAY['Air conditioning', 'Smart television', 'Living area', 'Work desk'])
+
+-- This makes the seed reusable: matching room numbers are updated, not duplicated.
 ON CONFLICT (room_number) DO UPDATE SET
     room_type = EXCLUDED.room_type,
     description = EXCLUDED.description,
@@ -34,6 +40,7 @@ ON CONFLICT (room_number) DO UPDATE SET
     breakfast_included = EXCLUDED.breakfast_included,
     special_amenities = EXCLUDED.special_amenities;
 
+-- Sample restaurant tables with different capacities, shapes, and statuses.
 INSERT INTO restaurant_tables (
     table_number,
     capacity,
@@ -49,9 +56,12 @@ VALUES
     ('T06', 6, 'Round', 'maintenance'),
     ('T07', 8, 'Rectangle', 'available'),
     ('T08', 10, 'Rectangle', 'inactive')
+
+-- This makes the seed reusable: matching table numbers are updated, not duplicated.
 ON CONFLICT (table_number) DO UPDATE SET
     capacity = EXCLUDED.capacity,
     table_shape = EXCLUDED.table_shape,
     status = EXCLUDED.status;
 
+-- Save all inserted or updated sample data.
 COMMIT;
