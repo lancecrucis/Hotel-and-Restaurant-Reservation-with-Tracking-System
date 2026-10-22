@@ -14,7 +14,7 @@ A group project for building three main parts of a hotel and restaurant reservat
 
 ## Project Status
 
-This repository currently contains the shared project structure and empty feature files. Each group member should implement their assigned feature inside the existing folders. The frontend Tailwind test page already builds successfully, while the backend server, API routes, database schema, and feature screens still need to be implemented.
+This repository contains the shared project structure and the first PostgreSQL schema for users, hotel rooms, and restaurant tables. Each group member should implement their assigned feature inside the existing folders. The frontend Tailwind test page already builds successfully, while the backend server, API routes, and feature screens still need to be implemented.
 
 ## Team Responsibilities
 
@@ -209,13 +209,27 @@ Until that setup is completed, installing the backend dependencies is sufficient
 
 Never commit real passwords, database URLs, or token secrets. Environment files are ignored by Git.
 
-The team should create a safe `backend/.env.example` before backend development begins. A typical local configuration will require values similar to:
+Copy the committed environment template before starting backend development:
+
+```bash
+cd backend
+cp .env.example .env
+```
+
+Windows PowerShell users can run:
+
+```powershell
+Copy-Item .env.example .env
+```
+
+The local file contains values similar to:
 
 ```env
 PORT=5000
 DATABASE_URL=postgresql://postgres:YOUR_PASSWORD@localhost:5432/hotel_restaurant
 CLIENT_URL=http://localhost:5173
 JWT_SECRET=replace_with_a_private_random_value
+DATABASE_SSL=false
 ```
 
 Each teammate can copy that example to `backend/.env` and enter their own local PostgreSQL password. The real `.env` file must not be uploaded to GitHub.
@@ -228,14 +242,7 @@ VITE_API_BASE_URL=http://localhost:5000/api/v1
 
 ## PostgreSQL Setup
 
-The database schema has not been added yet. Once the project lead provides the schema or migrations:
-
-1. Start PostgreSQL.
-2. Create a local database named `hotel_restaurant`.
-3. Apply the committed schema or migrations.
-4. Put the correct local connection string in `backend/.env`.
-
-The minimum planned tables are:
+The committed database currently contains:
 
 ```text
 users
@@ -243,7 +250,21 @@ rooms
 restaurant_tables
 ```
 
-Reservation tables will also be necessary if the availability endpoints must calculate availability from actual bookings.
+From the project root, create and populate the local database:
+
+```bash
+createdb -U postgres hotel_restaurant
+psql -U postgres -d hotel_restaurant -f database/migrations/001_initial_schema.sql
+psql -U postgres -d hotel_restaurant -f database/seeds/001_sample_data.sql
+```
+
+PostgreSQL will ask for the password selected during installation. Afterward, copy `backend/.env.example` to `backend/.env` and replace `YOUR_PASSWORD` in `DATABASE_URL` with that password.
+
+If `createdb` or `psql` is not recognized, add PostgreSQL's `bin` directory to the system PATH or run the same SQL files through pgAdmin's Query Tool. Apply the migration before the seed file.
+
+The migration is safe to run more than once, and the seed file updates matching room and table numbers instead of creating duplicates. It intentionally does not create a sample user because authentication must store a securely generated password hash.
+
+Reservation tables will be added later. Until then, the availability endpoints can filter by capacity and the current `status` value; they cannot calculate availability for specific dates or times.
 
 ## Recommended Git Workflow
 
@@ -287,6 +308,11 @@ Hotel and Restaurant Reservation System Project/
 │           ├── auth/
 │           ├── hotel/
 │           └── restaurant/
+├── database/
+│   ├── migrations/
+│   │   └── 001_initial_schema.sql
+│   └── seeds/
+│       └── 001_sample_data.sql
 ├── frontend/
 │   └── src/
 │       ├── app/
