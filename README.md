@@ -100,7 +100,7 @@ frontend/src/services/api.ts
 backend/src/app.js
 backend/src/server.js
 backend/src/config/database.js
-docs/api.md
+README.md
 ```
 
 The project lead should also coordinate the PostgreSQL schema, environment variables, and final integration of the three features.
@@ -287,8 +287,6 @@ Hotel and Restaurant Reservation System Project/
 │           ├── auth/
 │           ├── hotel/
 │           └── restaurant/
-├── docs/
-│   └── api.md
 ├── frontend/
 │   └── src/
 │       ├── app/
@@ -305,7 +303,7 @@ Hotel and Restaurant Reservation System Project/
 - Keep feature-specific code inside the assigned feature/module folder.
 - Coordinate before changing shared integration files.
 - Do not commit `.env`, passwords, secrets, `node_modules`, or build output.
-- Confirm that API request and response formats match `docs/api.md`.
+- Confirm that API request and response formats match the agreed endpoint definitions in this README.
 - Run `npm run lint` and `npm run build` in `frontend`.
 - Test the affected API endpoints once the backend test setup is available.
 
