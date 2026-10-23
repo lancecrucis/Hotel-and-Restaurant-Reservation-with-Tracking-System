@@ -1,13 +1,13 @@
-import './App.css'
+/*
+Main Application Component
+
+The router decides which page to display based on the browser URL.
+*/
+
+import AppRouter from "./app/router";
 
 function App() {
-  return (
-    <div className="flex min-h-screen items-center justify-center bg-gray-100">
-      <button className="rounded-lg bg-blue-600 px-6 py-3 font-semibold text-white hover:bg-blue-700">
-        Test Tailwind CSS
-      </button>
-    </div>
-  );
+  return <AppRouter />;
 }
 
 export default App;
