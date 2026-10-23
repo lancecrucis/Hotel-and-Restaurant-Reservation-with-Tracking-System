@@ -1,6 +1,13 @@
 
 -- Adds sample data so the hotel and restaurant screens have records to show.
 -- Run database/migrations/001_initial_schema.sql before this file.
+-- This file is optional when empty tables are preferred.
+--
+-- pgAdmin 4 instructions:
+-- 1. Select the hotel_restaurant database.
+-- 2. Open Tools > Query Tool.
+-- 3. Select Open File and choose this SQL file.
+-- 4. Select Execute Script or press F5.
 BEGIN;
 
 -- Sample hotel rooms. No users are seeded because passwords require secure hashes.
@@ -65,3 +72,10 @@ ON CONFLICT (table_number) DO UPDATE SET
 
 -- Save all inserted or updated sample data.
 COMMIT;
+
+-- Show how many sample records are now available.
+SELECT 'rooms' AS table_name, COUNT(*) AS row_count
+FROM rooms
+UNION ALL
+SELECT 'restaurant_tables' AS table_name, COUNT(*) AS row_count
+FROM restaurant_tables;

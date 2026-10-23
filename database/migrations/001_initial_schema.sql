@@ -2,6 +2,12 @@
 -- Creates the first version of the project database.
 -- Run this file before running the seed file.
 -- The transaction prevents a partially-created schema if a statement fails.
+--
+-- pgAdmin 4 instructions:
+-- 1. Select the hotel_restaurant database.
+-- 2. Open Tools > Query Tool.
+-- 3. Select Open File and choose this SQL file.
+-- 4. Select Execute Script or press F5.
 BEGIN;
 
 -- Stores customer and administrator accounts.
@@ -115,3 +121,9 @@ CREATE INDEX IF NOT EXISTS restaurant_tables_status_capacity_index
 
 -- Save every schema change made inside this transaction.
 COMMIT;
+
+-- Show the project tables after the migration finishes.
+SELECT table_name
+FROM information_schema.tables
+WHERE table_schema = 'public'
+ORDER BY table_name;

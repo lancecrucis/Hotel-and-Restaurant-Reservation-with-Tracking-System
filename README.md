@@ -1,26 +1,18 @@
 # Hotel and Restaurant Reservation System
 
-Built with React, Tailwind CSS, Node.js, Express, and PostgreSQL.
+Built with React, Tailwind CSS, Node.js, Express, PostgreSQL, and pgAdmin 4.
 
 ## Requirements
 
-Install these programs first:
+Install:
 
 - [Node.js 22 LTS](https://nodejs.org/)
-- [PostgreSQL](https://www.postgresql.org/download/)
-- [Git](https://git-scm.com/downloads) if you want to clone the repository
+- [PostgreSQL with pgAdmin 4](https://www.postgresql.org/download/)
+- [Git](https://git-scm.com/downloads) when using the clone method
 
-Check that they are installed:
+## Get the Project
 
-```bash
-node --version
-npm --version
-psql --version
-```
-
-## Download the Project
-
-### Option 1: Clone with Git
+### Clone with Git
 
 Copy the HTTPS URL from the GitHub **Code** button, then run:
 
@@ -29,123 +21,148 @@ git clone https://github.com/USERNAME/REPOSITORY.git
 cd "Hotel and Restaurant Reservation System Project"
 ```
 
-Replace the sample URL with the real repository URL. If the downloaded folder has a different name, use that name in the `cd` command.
+Replace the sample URL with the real GitHub repository URL.
 
-### Option 2: Download ZIP
+### Download ZIP
 
 1. Open the repository on GitHub.
 2. Select **Code > Download ZIP**.
 3. Extract the ZIP file.
 4. Open the extracted folder in Visual Studio Code.
-5. Select **Terminal > New Terminal**.
 
 ## Install Dependencies
 
-Install the frontend packages:
+In a terminal opened at the project root, run:
 
 ```bash
 cd frontend
 npm install
-```
-
-Install the backend packages:
-
-```bash
 cd ../backend
 npm install
 cd ..
 ```
 
-Do not upload `node_modules`. Every developer generates it by running `npm install`.
+## Set Up the Database with pgAdmin 4
 
-## Set Up PostgreSQL
+Every group member creates a separate local database by following the same instructions.
 
 ### 1. Create the database
 
-From the project root, run:
-
-```bash
-createdb -U postgres hotel_restaurant
-```
-
-Enter the PostgreSQL password selected during installation.
+1. Open **pgAdmin 4**.
+2. Connect to the local PostgreSQL server.
+3. Expand **Servers > PostgreSQL > Databases**.
+4. Right-click **Databases** and select **Create > Database**.
+5. Enter `hotel_restaurant` as the database name.
+6. Keep `postgres` as the owner and select **Save**.
 
 ### 2. Create the tables
 
-```bash
-psql -U postgres -d hotel_restaurant -f database/migrations/001_initial_schema.sql
+1. Select the new `hotel_restaurant` database.
+2. Open **Tools > Query Tool**.
+3. Select the **Open File** folder icon.
+4. Open:
+
+```text
+database/migrations/001_initial_schema.sql
 ```
 
-This creates the following tables:
+5. Select **Execute Script** or press **F5**.
+6. Confirm that the Data Output shows:
 
-- `users`
-- `rooms`
-- `restaurant_tables`
-
-### 3. Add sample data
-
-```bash
-psql -U postgres -d hotel_restaurant -f database/seeds/001_sample_data.sql
+```text
+restaurant_tables
+rooms
+users
 ```
 
-The seed adds sample rooms and restaurant tables. It does not add a sample user or password.
+The migration creates the three tables, their validation rules, indexes, and the user timestamp trigger.
 
-### 4. Create the backend environment file
+### 3. Add sample data (optional)
 
-On Windows PowerShell:
+Skip this step when empty tables are preferred.
+
+1. Keep the `hotel_restaurant` Query Tool open.
+2. Select **Open File**.
+3. Open:
+
+```text
+database/seeds/001_sample_data.sql
+```
+
+4. Select **Execute Script** or press **F5**.
+
+The Data Output should report six rooms and eight restaurant tables. No sample user or password is added.
+
+### 4. View the tables
+
+In pgAdmin's Object Explorer, expand:
+
+```text
+hotel_restaurant
+└── Schemas
+    └── public
+        └── Tables
+```
+
+Right-click **Tables** and select **Refresh** if the tables are not immediately visible.
+
+To list them in the Query Tool, run:
+
+```sql
+SELECT table_name
+FROM information_schema.tables
+WHERE table_schema = 'public'
+ORDER BY table_name;
+```
+
+## Configure the Backend Connection
+
+From the project root, create a private environment file.
+
+Windows PowerShell:
 
 ```powershell
 Copy-Item backend/.env.example backend/.env
 ```
 
-On macOS or Linux:
+macOS or Linux:
 
 ```bash
 cp backend/.env.example backend/.env
 ```
 
-Open `backend/.env` and replace `YOUR_PASSWORD` with your PostgreSQL password:
+Open `backend/.env` and replace `YOUR_PASSWORD` with the PostgreSQL password used in pgAdmin:
 
 ```env
 DATABASE_URL=postgresql://postgres:YOUR_PASSWORD@localhost:5432/hotel_restaurant
 ```
 
-Do not upload the real `.env` file because it contains private information.
+Never upload `backend/.env` to GitHub. Every member uses their own local PostgreSQL password.
 
-## Verify the Database
+## Run the Project
 
-Open PostgreSQL:
+Start the backend:
 
 ```bash
-psql -U postgres -d hotel_restaurant
+cd backend
+npm run dev
 ```
 
-Then run:
-
-```sql
-\dt
-SELECT * FROM rooms;
-SELECT * FROM restaurant_tables;
-```
-
-Exit PostgreSQL with:
-
-```sql
-\q
-```
-
-## Start the Frontend
+In a second terminal, start the frontend:
 
 ```bash
 cd frontend
 npm run dev
 ```
 
-Open the address displayed in the terminal, normally `http://localhost:5173`.
+Backend health check:
 
-## If PostgreSQL Commands Are Not Recognized
+```text
+http://localhost:5000/api/v1/health
+```
 
-Add PostgreSQL's `bin` folder to the system PATH, or open pgAdmin and run these files with its Query Tool in this order:
+Frontend:
 
-1. `database/migrations/001_initial_schema.sql`
-2. `database/seeds/001_sample_data.sql`
+```text
+http://localhost:5173
+```
