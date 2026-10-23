@@ -1,14 +1,14 @@
 require("dotenv").config();
 
 const app = require("./app");
-const { pool } = require("./config/database");
+const { initializeDatabase } = require("./config/initializeDatabase");
 
 const PORT = process.env.PORT || 5000;
 
 async function startServer() {
   try {
-    // Check the database connection before starting the API.
-    await pool.query("SELECT 1");
+    // Create the local database, tables, and sample data before serving requests.
+    await initializeDatabase();
 
     app.listen(PORT, () => {
       console.log(`Server running at http://localhost:${PORT}`);

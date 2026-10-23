@@ -1,0 +1,7 @@
+{
+  "name": "hotel-and-restaurant-reservation-system",
+  "private": true,
+  "scripts": {
+    "setup": "cd frontend && npm install --no-audit --no-fund && cd ../backend && npm install --no-audit --no-fund"
+  }
+}
