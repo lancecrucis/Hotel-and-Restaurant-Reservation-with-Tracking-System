@@ -75,7 +75,7 @@ rooms
 users
 ```
 
-The migration creates the three tables, their validation rules, indexes, and the user timestamp trigger.
+The migration creates the three tables, their validation rules, and required indexes.
 
 ### 3. Add sample data (optional)
 

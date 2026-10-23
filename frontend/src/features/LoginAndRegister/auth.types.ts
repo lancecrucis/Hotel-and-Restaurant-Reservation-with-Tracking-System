@@ -1,6 +1,6 @@
 
 // These are the only user roles accepted by the frontend and database.
-export type UserRole = "customer" | "admin";
+export type UserRole = "user" | "admin";
 
 // Safe user information returned by the API.
 // Never add password or passwordHash to this interface.
