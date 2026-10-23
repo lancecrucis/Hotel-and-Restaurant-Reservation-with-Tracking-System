@@ -34,3 +34,16 @@ export interface Room {
   // A list such as ["Air conditioning", "Television"].
   specialAmenities: string[];
 }
+
+// Values entered in the hotel room search form.
+export interface RoomSearchParams {
+  checkIn: string;
+  checkOut: string;
+  guests: number;
+}
+
+// Data returned after searching for available rooms.
+export interface RoomSearchResult {
+  rooms: Room[];
+  search: RoomSearchParams;
+}

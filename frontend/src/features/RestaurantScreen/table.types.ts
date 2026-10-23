@@ -22,3 +22,16 @@ export interface RestaurantTable {
   tableShape: string;
   status: TableStatus;
 }
+
+// Values entered in the restaurant table search form.
+export interface RestaurantTableSearchParams {
+  date: string;
+  time: string;
+  guests: number;
+}
+
+// Data returned after searching for available restaurant tables.
+export interface RestaurantTableSearchResult {
+  tables: RestaurantTable[];
+  search: RestaurantTableSearchParams;
+}

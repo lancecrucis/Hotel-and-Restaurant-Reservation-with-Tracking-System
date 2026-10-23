@@ -47,7 +47,7 @@ ON CONFLICT (room_number) DO UPDATE SET
     breakfast_included = EXCLUDED.breakfast_included,
     special_amenities = EXCLUDED.special_amenities;
 
--- Sample restaurant tables with different capacities, shapes, and statuses.
+-- Five sample restaurant tables for the prototype screen.
 INSERT INTO restaurant_tables (
     table_number,
     capacity,
@@ -59,10 +59,7 @@ VALUES
     ('T02', 2, 'Square', 'available'),
     ('T03', 4, 'Round', 'available'),
     ('T04', 4, 'Rectangle', 'available'),
-    ('T05', 6, 'Rectangle', 'available'),
-    ('T06', 6, 'Round', 'maintenance'),
-    ('T07', 8, 'Rectangle', 'available'),
-    ('T08', 10, 'Rectangle', 'inactive')
+    ('T05', 6, 'Rectangle', 'available')
 
 -- This makes the seed reusable: matching table numbers are updated, not duplicated.
 ON CONFLICT (table_number) DO UPDATE SET

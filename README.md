@@ -91,7 +91,7 @@ database/seeds/001_sample_data.sql
 
 4. Select **Execute Script** or press **F5**.
 
-The Data Output should report six rooms and eight restaurant tables. No sample user or password is added.
+The Data Output should report six rooms and five restaurant tables. No sample user or password is added.
 
 ### 4. View the tables
 

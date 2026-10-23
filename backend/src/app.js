@@ -15,6 +15,10 @@ const express = require("express");
 const cors = require("cors");
 
 const authRoutes = require("./modules/auth/auth.routes");
+const roomRoutes = require("./modules/hotel/room.routes");
+const restaurantTableRoutes = require(
+  "./modules/restaurant/table.routes",
+);
 const {
   notFound,
   errorHandler,
@@ -43,6 +47,12 @@ app.get("/api/v1/health", (request, response) => {
 
 // All authentication endpoints begin with /api/v1/auth.
 app.use("/api/v1/auth", authRoutes);
+
+// All hotel room endpoints begin with /api/v1/rooms.
+app.use("/api/v1/rooms", roomRoutes);
+
+// All restaurant table endpoints begin with /api/v1/restaurant/tables.
+app.use("/api/v1/restaurant/tables", restaurantTableRoutes);
 
 // These must remain after all valid routes.
 app.use(notFound);
