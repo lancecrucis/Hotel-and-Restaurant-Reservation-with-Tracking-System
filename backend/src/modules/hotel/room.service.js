@@ -5,13 +5,12 @@ This file handles PostgreSQL work for hotel rooms.
 
 Its responsibilities are:
 1. Retrieve all rooms.
-2. Find available rooms that fit the guest count.
+2. Find available rooms that fit the guest count and requested dates.
 3. Retrieve one room using its ID.
 4. Convert PostgreSQL fields into frontend-friendly fields.
 
-Date validation belongs in room.controller.js.
-Because reservation tables do not exist yet, dates cannot affect
-availability. For now, availability uses room status and capacity.
+Date validation belongs in room.controller.js. Availability excludes rooms
+with confirmed or active pending reservations that overlap the search dates.
 */
 
 const { query } = require("../../config/database");
@@ -63,7 +62,7 @@ async function getAllRooms() {
 }
 
 // GET /api/v1/rooms/available
-async function getAvailableRooms(guests) {
+async function getAvailableRooms(checkIn, checkOut, guests) {
   const result = await query(
     `
       SELECT
@@ -83,9 +82,28 @@ async function getAvailableRooms(guests) {
       FROM rooms
       WHERE status = 'available'
         AND capacity >= $1
+        AND NOT EXISTS (
+          SELECT 1
+          FROM hotel_reservations AS hr
+          INNER JOIN reservations AS r
+            ON r.id = hr.reservation_id
+          WHERE hr.room_id = rooms.id
+            AND hr.check_in < $3::date
+            AND hr.check_out > $2::date
+            AND (
+              r.status = 'confirmed'
+              OR (
+                r.status = 'pending'
+                AND (
+                  r.hold_expires_at IS NULL
+                  OR r.hold_expires_at > CURRENT_TIMESTAMP
+                )
+              )
+            )
+        )
       ORDER BY price_per_night, room_number
     `,
-    [guests],
+    [guests, checkIn, checkOut],
   );
 
   return result.rows.map(mapRoom);

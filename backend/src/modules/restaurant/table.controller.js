@@ -2,9 +2,12 @@
 Restaurant Table Controller
 
 This file validates request values, calls the service, and returns JSON.
-Date and time are validated now, but reservation conflicts cannot be checked
-until restaurant reservation records are added later.
+Availability checks a fixed two-hour reservation slot.
 */
+
+const getRestaurantEndTime = require(
+  "../restaurantReservation/timeSlot",
+);
 
 const {
   getAllRestaurantTables,
@@ -66,19 +69,32 @@ async function searchAvailableRestaurantTables(
       throw validationError("time must use the HH:MM format.");
     }
 
+    const endTime = getRestaurantEndTime(time);
+
+    if (!endTime) {
+      throw validationError(
+        "time must be no later than 21:59 for a two-hour reservation.",
+      );
+    }
+
     const guestCount = Number(guests);
 
     if (!Number.isInteger(guestCount) || guestCount < 1) {
       throw validationError("guests must be a positive whole number.");
     }
 
-    const tables = await getAvailableRestaurantTables(guestCount);
+    const tables = await getAvailableRestaurantTables(
+      date,
+      time,
+      endTime,
+      guestCount,
+    );
 
     response.status(200).json({
       success: true,
       data: {
         tables,
-        search: { date, time, guests: guestCount },
+        search: { date, time, endTime, guests: guestCount },
       },
     });
   } catch (error) {

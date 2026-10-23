@@ -26,12 +26,12 @@ INSERT INTO rooms (
     special_amenities
 )
 VALUES
-    ('101', 'Standard', 'Comfortable room for one or two guests.', 2500.00, 2, 'Queen', 1, 'available', NULL, TRUE, FALSE, ARRAY['Air conditioning', 'Television']),
-    ('102', 'Standard Twin', 'Twin-bed room suitable for friends or coworkers.', 2800.00, 2, 'Single', 2, 'available', NULL, TRUE, FALSE, ARRAY['Air conditioning', 'Television', 'Desk']),
-    ('201', 'Deluxe', 'Spacious room with a seating area and city view.', 4200.00, 3, 'King', 1, 'available', NULL, TRUE, TRUE, ARRAY['Air conditioning', 'Television', 'Mini refrigerator', 'City view']),
-    ('202', 'Deluxe Twin', 'Large room with two beds and complimentary breakfast.', 4500.00, 4, 'Double', 2, 'available', NULL, TRUE, TRUE, ARRAY['Air conditioning', 'Television', 'Mini refrigerator']),
-    ('301', 'Family Suite', 'Family suite with additional living space.', 6500.00, 6, 'Mixed', 3, 'available', NULL, TRUE, TRUE, ARRAY['Air conditioning', 'Television', 'Living area', 'Kitchenette']),
-    ('302', 'Executive Suite', 'Premium suite intended for business and leisure stays.', 7500.00, 4, 'King', 1, 'maintenance', NULL, TRUE, TRUE, ARRAY['Air conditioning', 'Smart television', 'Living area', 'Work desk'])
+    ('101', 'Standard', 'Comfortable room for one or two guests.', 2500.00, 2, 'Queen', 1, 'available', '/images/rooms/images (28).jpg', TRUE, FALSE, ARRAY['Air conditioning', 'Television']),
+    ('102', 'Standard Twin', 'Twin-bed room suitable for friends or coworkers.', 2800.00, 2, 'Single', 2, 'available', '/images/rooms/images (28).jpg', TRUE, FALSE, ARRAY['Air conditioning', 'Television', 'Desk']),
+    ('201', 'Deluxe', 'Spacious room with a seating area and city view.', 4200.00, 3, 'King', 1, 'available', '/images/rooms/images (29).jpg', TRUE, TRUE, ARRAY['Air conditioning', 'Television', 'Mini refrigerator', 'City view']),
+    ('202', 'Deluxe Twin', 'Large room with two beds and complimentary breakfast.', 4500.00, 4, 'Double', 2, 'available', '/images/rooms/images (29).jpg', TRUE, TRUE, ARRAY['Air conditioning', 'Television', 'Mini refrigerator']),
+    ('301', 'Family Suite', 'Family suite with additional living space.', 6500.00, 6, 'Mixed', 3, 'available', '/images/rooms/1274dabc6aad809a744610a9907bebe8.jpg', TRUE, TRUE, ARRAY['Air conditioning', 'Television', 'Living area', 'Kitchenette']),
+    ('302', 'Executive Suite', 'Premium suite intended for business and leisure stays.', 7500.00, 4, 'King', 1, 'maintenance', '/images/rooms/1274dabc6aad809a744610a9907bebe8.jpg', TRUE, TRUE, ARRAY['Air conditioning', 'Smart television', 'Living area', 'Work desk'])
 
 -- This makes the seed reusable: matching room numbers are updated, not duplicated.
 ON CONFLICT (room_number) DO UPDATE SET

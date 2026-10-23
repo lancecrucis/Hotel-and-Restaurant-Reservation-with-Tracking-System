@@ -17,9 +17,12 @@ Combined endpoint:
 
 const express = require("express");
 
+const authenticate = require("../../middleware/authenticate");
+
 const {
   register,
   login,
+  getCurrentUser,
 } = require("./auth.controller");
 
 const router = express.Router();
@@ -29,5 +32,8 @@ router.post("/register", register);
 
 // Send login requests to the login controller.
 router.post("/login", login);
+
+// Return the user represented by the JWT access token.
+router.get("/me", authenticate, getCurrentUser);
 
 module.exports = router;

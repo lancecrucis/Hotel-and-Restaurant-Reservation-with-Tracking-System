@@ -14,14 +14,12 @@ Install:
 
 ### Clone with Git
 
-Copy the HTTPS URL from the GitHub **Code** button, then run:
+Open PowerShell or a terminal and run:
 
 ```bash
-git clone https://github.com/USERNAME/REPOSITORY.git
-cd "Hotel and Restaurant Reservation System Project"
+git clone https://github.com/lancecrucis/Hotel-and-Restaurant-Reservation-with-Tracking-System.git
+cd Hotel-and-Restaurant-Reservation-with-Tracking-System
 ```
-
-Replace the sample URL with the real GitHub repository URL.
 
 ### Download ZIP
 
@@ -32,19 +30,19 @@ Replace the sample URL with the real GitHub repository URL.
 
 ## Install Dependencies
 
-In a terminal opened at the project root, run:
+From the project root, run:
 
 ```bash
 cd frontend
-npm install
+npm ci
 cd ../backend
-npm install
+npm ci
 cd ..
 ```
 
 ## Set Up the Database with pgAdmin 4
 
-Every group member creates a separate local database by following the same instructions.
+Each group member creates their own local copy of the database. The database files are already included in the `database` folder.
 
 ### 1. Create the database
 
@@ -55,43 +53,50 @@ Every group member creates a separate local database by following the same instr
 5. Enter `hotel_restaurant` as the database name.
 6. Keep `postgres` as the owner and select **Save**.
 
-### 2. Create the tables
+### 2. Create all tables
 
 1. Select the new `hotel_restaurant` database.
 2. Open **Tools > Query Tool**.
-3. Select the **Open File** folder icon.
-4. Open:
+3. Use **Open File** and execute these files one at a time with **F5**, in this exact order:
 
 ```text
 database/migrations/001_initial_schema.sql
+database/migrations/002_hotel_reservations.sql
+database/migrations/003_restaurant_reservations.sql
+database/migrations/004_reservation_history_and_notifications.sql
+database/migrations/005_payments.sql
 ```
 
-5. Select **Execute Script** or press **F5**.
-6. Confirm that the Data Output shows:
+4. Confirm that the database contains:
 
 ```text
 restaurant_tables
 rooms
 users
+reservations
+hotel_reservations
+restaurant_reservations
+reservation_status_history
+notifications
+payments
 ```
 
-The migration creates the three tables, their validation rules, and required indexes.
+The migration files create the tables, validation rules, relationships, indexes, notifications trigger, and payment table. Run them in order. For a completely fresh setup, create a new empty database first.
 
-### 3. Add sample data (optional)
+### 3. Add sample data
 
-Skip this step when empty tables are preferred.
+This adds six rooms and five restaurant tables for testing. It does not create a sample user or password.
 
 1. Keep the `hotel_restaurant` Query Tool open.
-2. Select **Open File**.
-3. Open:
+2. Select **Open File** and open:
 
 ```text
 database/seeds/001_sample_data.sql
 ```
 
-4. Select **Execute Script** or press **F5**.
+3. Press **F5**.
 
-The Data Output should report six rooms and five restaurant tables. No sample user or password is added.
+The Data Output should report six rooms and five restaurant tables. The seed is safe to run again because matching room and table numbers are updated instead of duplicated.
 
 ### 4. View the tables
 

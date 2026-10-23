@@ -83,7 +83,11 @@ async function searchAvailableRooms(request, response, next) {
       );
     }
 
-    const rooms = await getAvailableRooms(guestCount);
+    const rooms = await getAvailableRooms(
+      checkIn,
+      checkOut,
+      guestCount,
+    );
 
     response.status(200).json({
       success: true,

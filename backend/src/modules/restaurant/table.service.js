@@ -31,17 +31,42 @@ async function getAllRestaurantTables() {
 }
 
 // GET /api/v1/restaurant/tables/available
-async function getAvailableRestaurantTables(guests) {
+async function getAvailableRestaurantTables(
+  date,
+  startTime,
+  endTime,
+  guests,
+) {
   const result = await query(
     `
       SELECT id, table_number, capacity, table_shape, status
       FROM restaurant_tables
       WHERE status = 'available'
         AND capacity >= $1
+        AND NOT EXISTS (
+          SELECT 1
+          FROM restaurant_reservations AS rr
+          INNER JOIN reservations AS r
+            ON r.id = rr.reservation_id
+          WHERE rr.table_id = restaurant_tables.id
+            AND rr.reservation_date = $2::date
+            AND rr.start_time < $4::time
+            AND rr.end_time > $3::time
+            AND (
+              r.status = 'confirmed'
+              OR (
+                r.status = 'pending'
+                AND (
+                  r.hold_expires_at IS NULL
+                  OR r.hold_expires_at > CURRENT_TIMESTAMP
+                )
+              )
+            )
+        )
       ORDER BY capacity, table_number
       LIMIT 5
     `,
-    [guests],
+    [guests, date, startTime, endTime],
   );
 
   return result.rows.map(mapRestaurantTable);

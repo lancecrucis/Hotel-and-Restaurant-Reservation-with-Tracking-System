@@ -19,6 +19,18 @@ const roomRoutes = require("./modules/hotel/room.routes");
 const restaurantTableRoutes = require(
   "./modules/restaurant/table.routes",
 );
+const hotelReservationRoutes = require(
+  "./modules/hotelReservation/hotelReservation.routes",
+);
+const restaurantReservationRoutes = require(
+  "./modules/restaurantReservation/restaurantReservation.routes",
+);
+const notificationRoutes = require(
+  "./modules/notification/notification.routes",
+);
+const reservationHistoryRoutes = require(
+  "./modules/reservationHistory/reservationHistory.routes",
+);
 const {
   notFound,
   errorHandler,
@@ -53,6 +65,22 @@ app.use("/api/v1/rooms", roomRoutes);
 
 // All restaurant table endpoints begin with /api/v1/restaurant/tables.
 app.use("/api/v1/restaurant/tables", restaurantTableRoutes);
+
+// Authenticated hotel booking endpoints.
+app.use("/api/v1/hotel-reservations", hotelReservationRoutes);
+
+// Authenticated restaurant booking endpoints.
+app.use(
+  "/api/v1/restaurant-reservations",
+  restaurantReservationRoutes,
+);
+
+// User notifications and reservation status history.
+app.use("/api/v1/notifications", notificationRoutes);
+app.use(
+  "/api/v1/reservation-status-history",
+  reservationHistoryRoutes,
+);
 
 // These must remain after all valid routes.
 app.use(notFound);

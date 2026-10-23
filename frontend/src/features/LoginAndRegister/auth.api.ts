@@ -12,6 +12,7 @@ import type {
   AuthResponse,
   LoginInput,
   RegisterInput,
+  User,
 } from "./auth.types";
 
 // Send registration information to the backend.
@@ -32,4 +33,11 @@ export function loginAccount(
     method: "POST",
     body: JSON.stringify(input),
   });
+}
+
+// Retrieve the profile represented by the saved JWT access token.
+export async function getCurrentUser(): Promise<User> {
+  const data = await apiRequest<{ user: User }>("/auth/me");
+
+  return data.user;
 }

@@ -3,8 +3,8 @@ import { NavLink } from "react-router-dom";
 /*
 Hotel and Restaurant Toggle
 
-This shared navigation lets users switch between the two prototype screens.
-The active screen uses blue while the other screen uses gray.
+This shared navigation lets users switch between the prototype screens.
+Only the Hotel and Restaurant sections are shown for now.
 */
 export default function SectionToggle() {
   const buttonClass = ({ isActive }: { isActive: boolean }) =>

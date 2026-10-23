@@ -10,6 +10,7 @@ This
 const {
   registerUser,
   loginUser,
+  getUserById,
 } = require("./auth.service");
 
 // Create an error for invalid registration information.
@@ -150,7 +151,22 @@ async function login(request, response, next) {
   }
 }
 
+// GET /api/v1/auth/me
+async function getCurrentUser(request, response, next) {
+  try {
+    const user = await getUserById(request.user.id);
+
+    response.status(200).json({
+      success: true,
+      data: { user },
+    });
+  } catch (error) {
+    next(error);
+  }
+}
+
 module.exports = {
   register,
   login,
+  getCurrentUser,
 };

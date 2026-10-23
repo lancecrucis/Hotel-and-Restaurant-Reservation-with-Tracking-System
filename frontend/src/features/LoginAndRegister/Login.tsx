@@ -8,11 +8,13 @@ After a successful login, it stores the access token in localStorage.
 */
 
 import { useState, type FormEvent } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import { loginAccount } from "./auth.api";
 
 function Login() {
+  const navigate = useNavigate();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -37,8 +39,8 @@ function Login() {
       // Save the JWT so protected requests can use it later.
       localStorage.setItem("accessToken", result.accessToken);
 
-      setMessage(`Logged in as ${result.user.email}.`);
-      setPassword("");
+      // Continue to the hotel screen after a successful login.
+      navigate("/rooms", { replace: true });
     } catch (error) {
       setIsError(true);
       setMessage(

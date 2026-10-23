@@ -33,5 +33,7 @@ export interface RestaurantTableSearchParams {
 // Data returned after searching for available restaurant tables.
 export interface RestaurantTableSearchResult {
   tables: RestaurantTable[];
-  search: RestaurantTableSearchParams;
+  search: RestaurantTableSearchParams & {
+    endTime: string;
+  };
 }
